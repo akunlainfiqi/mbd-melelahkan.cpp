@@ -11,7 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-promise-router": "^4.1.1",
@@ -19,10 +18,8 @@
     "jsonwebtoken": "^8.5.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
     "pg": "^8.7.3",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.20.1"
+    "pg-hstore": "^2.3.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
