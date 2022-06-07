@@ -1,18 +1,22 @@
 const Router = require('express-promise-router');
-
-const db = require('../db')
+const UsersController = require('../controller/user.controller');
 
 const router = new Router();
 
 module.exports = router;
 
 router.get('/:id',async (req,res) => {
-    try{
-        const { id } = req.params;
-        const { rows } = await db.query(`SELECT * FROM public.user`)
-        if(rows.length === 0) res.json({ message: 'invalid user' });
-        else res.send(rows);
-    } catch(err){
-        return Promise.reject(err);
+    hasil = await UsersController.getUserByID(req.params.id);
+    res.send(hasil);
+})
+
+router.post('/',async(req, res)=>{
+    try {
+        const { nik,nama,dob,password }=req.body;
+        hasil = await UsersController.createUser(nik,nama,dob,password);
+        res.sendStatus(hasil)
+    } catch(error){
+        console.log(error);
+        res.sendStatus(400);
     }
 })
