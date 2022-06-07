@@ -1,5 +1,6 @@
 const routes = {
  admin : require('./admin'),
+ auth : require('./auth'),
  users : require('./user'),
  country : require('./country'),
  destination : require('./destination'),
