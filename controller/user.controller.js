@@ -2,7 +2,7 @@ const db = require('../db');
 
 const getUserByID = async (id) =>{
     try{
-        const { rows } = await db.query(`SELECT * FROM public.user where id_user = $1`,[id]);
+        const { rows } = await db.query(`SELECT * FROM traveluser where id_user = $1`,[id]);
         if(rows.length === 0) return([]);
         else return(rows);
     } catch(err){
@@ -10,9 +10,9 @@ const getUserByID = async (id) =>{
     }
 }
 
-const getUserByName = async (name) =>{
+const getUserByEmail = async (email) =>{
     try{
-        const { rows } = await db.query(`SELECT * FROM public.user where nama_user = $1`,[name]);
+        const { rows } = await db.query(`SELECT * FROM traveluser where email = $1`,[email]);
         if(rows.length === 0) return([]);
         else return(rows);
     } catch(err){
@@ -20,16 +20,16 @@ const getUserByName = async (name) =>{
     }
 }
 
-const createUser = async(nik, nama, dob, password) => {
+const createUser = async(email, nama, dob, password) => {
     try{
-        const check = await db.query(`select nama_user FROM public.user WHERE nama_user = $1`,[nama]);
+        const check = await db.query(`select email FROM traveluser WHERE email = $1`,[email]);
         if(check.rows[0]){
             return 409
         } else {
             db.query(`BEGIN`);
             const status = await db.query(
-                `INSERT INTO public.user VALUES (nextval('public.user_seq'),$1,$2,$3,$4)`, 
-                [nik,nama,dob, password]
+                `INSERT INTO traveluser VALUES (nextval('user_seq'),$1,$2,$3,$4)`, 
+                [email,nama,dob, password]
             );
             db.query(`COMMIT`);
             console.log(status);
@@ -43,6 +43,6 @@ const createUser = async(nik, nama, dob, password) => {
 
 module.exports = {
     getUserByID,
-    getUserByName,
+    getUserByEmail,
     createUser,
 }
