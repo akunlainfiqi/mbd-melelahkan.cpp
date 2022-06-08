@@ -22,6 +22,24 @@ const getTravelPlanByUserId = async (id_user)=>{
     }
 }
 
+const createTravelPlan = async (nama, start, end, price, admin) =>{
+    try{
+        db.query(`BEGIN`);
+        const insert = await db.query(
+            `INSERT INTO travel_plan 
+            VALUES (nextval('travel_plan_seq'),$1,$2,$3,$4,$5)`,
+            [nama, start, end, price, admin]
+        );
+        db.query(`COMMIT`);
+        console.log(insert);
+        return 200;
+    } catch(e) {
+        console.log(e);
+        return 500;
+    }
+}
+
 module.exports={
     getTravelPlanByUserId,
+    createTravelPlan
 }
