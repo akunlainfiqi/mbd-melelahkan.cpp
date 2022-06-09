@@ -21,3 +21,24 @@ router.post('/',passport.authenticate('jwt', {session :false}),async(req,res)=>{
         res.sendStatus(500);
     }
 })
+
+router.delete('/:id_plan',passport.authenticate('jwt',{session:false}),async (req,res)=>{
+    try{
+        hasil = await TravelController.deleteTravelPlan(req.params.id_plan,req.user.id_user);
+        res.sendStatus(hasil);
+    }catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+})
+
+router.post('/invite',passport.authenticate('jwt',{session:false}),async (req,res) => {
+    try{
+        const { id_plan, invited_email } = req.body, { id_user } = req.user;
+        hasil = await TravelController.addUserToPlan(id_plan, invited_email, id_user);
+        res.sendStatus(hasil);
+    } catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+})
