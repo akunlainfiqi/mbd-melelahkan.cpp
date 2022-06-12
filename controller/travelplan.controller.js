@@ -1,4 +1,5 @@
 const db = require('../db');
+
 const getTravelPlanByUserId = async (id_user)=>{
     try{
         const { rows } = await db.query(
@@ -60,9 +61,48 @@ const addUserToPlan = async(id_plan,invited_user,admin_id)=>{
     db.query(`COMMIT`);
     return 200;
 }
+
+const getTravelPlanMemberByTravelId = async(travel_id)=>{
+    try {
+        const {rows} = await db.query(`
+        SELECT id_user, email, nama_user from traveluser, user_travel_plan 
+        where user_travel_plan.travel_plan_id_plan = $1 and user_travel_plan.user_id_user = traveluser.id_user
+        `,[travel_id]);
+        return(rows);
+    } catch(e) {
+        console.log(e);
+        return 500;
+    }
+}
+
+const getTravelPlanById = async(travel_id, user_id)=>{
+    try {
+        const {rows} = await db.query(`
+        SELECT * FROM travel_plan, user_travel_plan 
+        WHERE travel_plan.id_plan = $1 
+        AND user_travel_plan.travel_plan_id_plan = $1 
+        AND user_travel_plan.user_id_user = $2
+        `,[travel_id, user_id]);
+        rows.forEach(e => {
+            const oldStartDate = new Date(e.start_date);
+            const oldEndDate = new Date(e.end_date);
+            let convertOSD = oldStartDate.toLocaleString().split(',')[0];
+            let convertOED = oldEndDate.toLocaleString().split(',')[0];
+            e.start_date = convertOSD;
+            e.end_date = convertOED;
+        });
+        return(rows);
+    } catch(e){
+        console.log(e);
+        return 500;
+    }
+}
+
 module.exports={
     getTravelPlanByUserId,
     createTravelPlan,
     deleteTravelPlan,
     addUserToPlan,
+    getTravelPlanById,
+    getTravelPlanMemberByTravelId,
 }
